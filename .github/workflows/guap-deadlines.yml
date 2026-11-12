@@ -1,0 +1,42 @@
+name: GUAP Deadline Reminder
+
+on:
+  schedule:
+    - cron: '0 6 * * *' # 06:00 UTC = 09:00 по МСК
+  workflow_dispatch:
+
+jobs:
+  remind:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout репозитория
+        uses: actions/checkout@v4
+
+      - name: Установка Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Установка зависимостей npm
+        run: npm ci
+
+      - name: Установка браузера Playwright Chromium
+        run: npx playwright install chromium
+
+      - name: Установка системных зависимостей для Chromium
+        run: npx playwright install-deps chromium
+
+      - name: Запуск парсинга дедлайнов и отправка уведомлений
+        env:
+          GUAP_LOGIN: ${{ secrets.GUAP_LOGIN }}
+          GUAP_PASSWORD: ${{ secrets.GUAP_PASSWORD }}
+          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+        run: node index.js
+
+      - name: Сохранение скриншота ошибки в артефакты
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: error-screenshot
+          path: error.png

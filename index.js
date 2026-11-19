@@ -6,6 +6,7 @@ const SUAI_LOGIN = process.env.SUAI_LOGIN;
 const SUAI_PASSWORD = process.env.SUAI_PASSWORD;
 const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN;
 const TG_CHAT_ID = process.env.TG_CHAT_ID;
+const TG_THREAD_ID = process.env.TG_THREAD_ID;
 
 const PROFILE_URL = 'https://pro.guap.ru/inside/profile';
 const TASKS_URL = 'https://pro.guap.ru/inside/student/tasks/';
@@ -63,12 +64,17 @@ function daysBetween(deadlineDate, todayMSK) {
 async function sendTelegramMessage(text) {
   log('Отправка уведомления в Telegram...');
   const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
-  const response = await axios.post(url, {
+  const payload = {
     chat_id: TG_CHAT_ID,
     text,
     parse_mode: 'Markdown',
     disable_web_page_preview: true,
-  });
+  };
+  if (TG_THREAD_ID) {
+    payload.message_thread_id = parseInt(TG_THREAD_ID, 10);
+    log(`Целевая тема (thread): ${TG_THREAD_ID}`);
+  }
+  const response = await axios.post(url, payload);
   log(`Ответ Telegram API: HTTP ${response.status}`);
   return response.data;
 }
@@ -89,7 +95,7 @@ async function main() {
     ? TG_BOT_TOKEN.substring(0, 8) + '...'
     : 'НЕ ЗАДАН';
   log(
-    `Переменные окружения: SUAI_LOGIN=${SUAI_LOGIN}, TG_BOT_TOKEN=${tgTokenPreview}, TG_CHAT_ID=${TG_CHAT_ID ? 'задан' : 'НЕ ЗАДАН'}`
+    `Переменные окружения: SUAI_LOGIN=${SUAI_LOGIN}, TG_BOT_TOKEN=${tgTokenPreview}, TG_CHAT_ID=${TG_CHAT_ID ? 'задан' : 'НЕ ЗАДАН'}, TG_THREAD_ID=${TG_THREAD_ID ? 'задан' : 'НЕ ЗАДАН'}`
   );
 
   log('=== Старт скрипта парсинга дедлайнов ЛК СУАИ ===');

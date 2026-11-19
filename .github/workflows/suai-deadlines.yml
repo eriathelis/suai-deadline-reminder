@@ -1,4 +1,4 @@
-name: GUAP Deadline Reminder
+name: SUAI Deadline Reminder
 
 on:
   schedule:
@@ -18,7 +18,7 @@ jobs:
           node-version: '20'
 
       - name: Установка зависимостей npm
-        run: npm ci
+        run: npm install
 
       - name: Установка браузера Playwright Chromium
         run: npx playwright install chromium
@@ -28,8 +28,8 @@ jobs:
 
       - name: Запуск парсинга дедлайнов и отправка уведомлений
         env:
-          GUAP_LOGIN: ${{ secrets.GUAP_LOGIN }}
-          GUAP_PASSWORD: ${{ secrets.GUAP_PASSWORD }}
+          SUAI_LOGIN: ${{ secrets.SUAI_LOGIN }}
+          SUAI_PASSWORD: ${{ secrets.SUAI_PASSWORD }}
           TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
           TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
         run: node index.js

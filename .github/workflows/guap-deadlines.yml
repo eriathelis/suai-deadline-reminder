@@ -1,2 +1,0 @@
-      - name: Установка зависимостей npm
-        run: npm install

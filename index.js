@@ -2,8 +2,8 @@ require('dotenv').config();
 const axios = require('axios');
 const { chromium } = require('playwright');
 
-const GUAP_LOGIN = process.env.GUAP_LOGIN;
-const GUAP_PASSWORD = process.env.GUAP_PASSWORD;
+const SUAI_LOGIN = process.env.SUAI_LOGIN;
+const SUAI_PASSWORD = process.env.SUAI_PASSWORD;
 const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN;
 const TG_CHAT_ID = process.env.TG_CHAT_ID;
 
@@ -74,9 +74,9 @@ async function sendTelegramMessage(text) {
 }
 
 async function main() {
-  if (!GUAP_LOGIN || !GUAP_PASSWORD) {
+  if (!SUAI_LOGIN || !SUAI_PASSWORD) {
     throw new Error(
-      'Переменные окружения GUAP_LOGIN и/или GUAP_PASSWORD не заданы'
+      'Переменные окружения SUAI_LOGIN и/или SUAI_PASSWORD не заданы'
     );
   }
   if (!TG_BOT_TOKEN || !TG_CHAT_ID) {
@@ -89,10 +89,10 @@ async function main() {
     ? TG_BOT_TOKEN.substring(0, 8) + '...'
     : 'НЕ ЗАДАН';
   log(
-    `Переменные окружения: GUAP_LOGIN=${GUAP_LOGIN}, TG_BOT_TOKEN=${tgTokenPreview}, TG_CHAT_ID=${TG_CHAT_ID ? 'задан' : 'НЕ ЗАДАН'}`
+    `Переменные окружения: SUAI_LOGIN=${SUAI_LOGIN}, TG_BOT_TOKEN=${tgTokenPreview}, TG_CHAT_ID=${TG_CHAT_ID ? 'задан' : 'НЕ ЗАДАН'}`
   );
 
-  log('=== Старт скрипта парсинга дедлайнов ЛК ГУАП ===');
+  log('=== Старт скрипта парсинга дедлайнов ЛК СУАИ ===');
 
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({
@@ -128,7 +128,7 @@ async function main() {
       .locator('input#username, input[name="username"]')
       .first();
     await emailInput.waitFor({ state: 'visible', timeout: 10000 });
-    await emailInput.fill(GUAP_LOGIN);
+    await emailInput.fill(SUAI_LOGIN);
     log('Email введен');
 
     log('Ввод пароля...');
@@ -136,7 +136,7 @@ async function main() {
       .locator('input#password-input, input[name="password"]')
       .first();
     await passwordInput.waitFor({ state: 'visible', timeout: 10000 });
-    await passwordInput.fill(GUAP_PASSWORD);
+    await passwordInput.fill(SUAI_PASSWORD);
     log('Пароль введен');
 
     log('Клик кнопки "Войти"...');

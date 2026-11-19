@@ -305,7 +305,7 @@ async function main() {
       // Задания без даты — напоминаем 15 числа каждого месяца
       if (task.noDate) {
         const dayOfMonth = todayMSK.getDate();
-        if (dayOfMonth !== 19) {
+        if (dayOfMonth !== 15) {
           log(
             `Пропуск задачи без даты "${task.workTitle}": сегодня ${dayOfMonth} число, напоминание только 15-го`
           );
@@ -347,11 +347,11 @@ async function main() {
 
       if (task.mustUpload) {
         message =
-          '🔥 *КРИТИЧЕСКИЙ ДЕДЛАЙН! ТРЕБУЕТСЯ ЗАГРУЗКА!*\n\n' +
+          '🔥 *КРИТИЧЕСКИЙ ДЕДЛАЙН!*\n\n' +
           `📚 *${task.discipline}*\n` +
           `📝 ${task.workTitle}\n` +
           `⏳ Срок сдачи: через ${reminderLabel} (${dateLabel})\n` +
-          '⚠️ *Внимание:* Эту работу необходимо обязательно загрузить в ЛК!';
+          '⚠️ *Внимание:* Эту работу необходимо обязательно загрузить в ЛК до указанной даты включительно!';
       } else {
         message =
           '🚨 *Напоминание о дедлайне!*\n\n' +

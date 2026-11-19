@@ -299,7 +299,7 @@ async function main() {
       // Задания без даты — напоминаем 15 числа каждого месяца
       if (task.noDate) {
         const dayOfMonth = todayMSK.getDate();
-        if (dayOfMonth !== 12) {
+        if (dayOfMonth !== 19) {
           log(
             `Пропуск задачи без даты "${task.workTitle}": сегодня ${dayOfMonth} число, напоминание только 15-го`
           );
